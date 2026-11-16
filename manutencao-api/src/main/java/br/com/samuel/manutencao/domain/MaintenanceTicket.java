@@ -2,7 +2,10 @@ package br.com.samuel.manutencao.domain;
 
 import jakarta.persistence.*;
 
+import java.util.Date;
 import java.util.Objects;
+
+import static br.com.samuel.manutencao.domain.StatusTicket.ABERTO;
 
 @Entity
 public class MaintenanceTicket {
@@ -23,8 +26,12 @@ public class MaintenanceTicket {
     @Column(name = "resolution")
     private String resolution;
 
+    @Column(name = "status",length = 8)
+    @Enumerated(EnumType.STRING)
+    private StatusTicket status = ABERTO;
+
     @Column(name = "solved",length = 8)
-    private Boolean solved = false;
+    private String solved;
 
     public MaintenanceTicket() {
     }
@@ -69,11 +76,19 @@ public class MaintenanceTicket {
         this.resolution = resolution;
     }
 
-    public Boolean getSolved() {
+    public StatusTicket getStatus() {
+        return status;
+    }
+
+    public StatusTicket setStatus(StatusTicket status) {
+        return status;
+    }
+
+    public String getSolved() {
         return solved;
     }
 
-    public void setSolved(Boolean solved) {
+    public void setSolved(String solved) {
         this.solved = solved;
     }
 
@@ -81,11 +96,11 @@ public class MaintenanceTicket {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         MaintenanceTicket that = (MaintenanceTicket) o;
-        return Objects.equals(getId(), that.getId()) && Objects.equals(getDescription(), that.getDescription()) && Objects.equals(getLocation(), that.getLocation()) && Objects.equals(getTitle(), that.getTitle()) && Objects.equals(getResolution(), that.getResolution()) && Objects.equals(getSolved(), that.getSolved());
+        return Objects.equals(getId(), that.getId()) && Objects.equals(getDescription(), that.getDescription()) && Objects.equals(getLocation(), that.getLocation()) && Objects.equals(getTitle(), that.getTitle()) && Objects.equals(getResolution(), that.getResolution()) && getStatus() == that.getStatus() && Objects.equals(getSolved(), that.getSolved());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getDescription(), getLocation(), getTitle(), getResolution(), getSolved());
+        return Objects.hash(getId(), getDescription(), getLocation(), getTitle(), getResolution(), getStatus(), getSolved());
     }
 }

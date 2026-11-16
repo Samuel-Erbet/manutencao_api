@@ -1,6 +1,9 @@
 package br.com.samuel.manutencao.domain;
 
+import java.util.Date;
 import java.util.Objects;
+
+import static br.com.samuel.manutencao.domain.StatusTicket.ABERTO;
 
 public class MaintenanceTicketDTO {
 
@@ -9,7 +12,8 @@ public class MaintenanceTicketDTO {
     private String Location;
     private String title;
     private String resolution;
-    private Boolean solved;
+    private String solved;
+    private StatusTicket status = ABERTO;
 
     public MaintenanceTicketDTO() {
     }
@@ -54,23 +58,31 @@ public class MaintenanceTicketDTO {
         this.resolution = resolution;
     }
 
-    public Boolean getSolved() {
+    public StatusTicket getStatus() {
+        return status;
+    }
+
+    public String getSolved() {
         return solved;
     }
 
-    public void setSolved(Boolean solved) {
+    public void setSolved(String solved) {
         this.solved = solved;
+    }
+
+    public void setStatus(StatusTicket status) {
+        this.status = status;
     }
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         MaintenanceTicketDTO that = (MaintenanceTicketDTO) o;
-        return Objects.equals(id, that.id) && Objects.equals(description, that.description) && Objects.equals(Location, that.Location) && Objects.equals(title, that.title) && Objects.equals(resolution, that.resolution) && Objects.equals(solved, that.solved);
+        return Objects.equals(getId(), that.getId()) && Objects.equals(getDescription(), that.getDescription()) && Objects.equals(getLocation(), that.getLocation()) && Objects.equals(getTitle(), that.getTitle()) && Objects.equals(getResolution(), that.getResolution()) && Objects.equals(getSolved(), that.getSolved()) && getStatus() == that.getStatus();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, description, Location, title, resolution, solved);
+        return Objects.hash(getId(), getDescription(), getLocation(), getTitle(), getResolution(), getSolved(), getStatus());
     }
 }

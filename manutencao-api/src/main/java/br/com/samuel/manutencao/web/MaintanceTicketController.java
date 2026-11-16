@@ -1,7 +1,9 @@
 package br.com.samuel.manutencao.web;
 
+import br.com.samuel.manutencao.ExceptionHandler.exceptions.TicketResourceNotFoundException;
 import br.com.samuel.manutencao.domain.MaintenanceTicket;
 import br.com.samuel.manutencao.domain.MaintenanceTicketDTO;
+import br.com.samuel.manutencao.repository.TicketsRepository;
 import br.com.samuel.manutencao.service.MaintanceTicketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,8 +17,11 @@ public class MaintanceTicketController {
     @Autowired
     MaintanceTicketService service;
 
+    @Autowired
+    TicketsRepository repository;
+
     @PostMapping("/create")
-    public MaintenanceTicketDTO create (@RequestBody MaintenanceTicket ticket){
+    public MaintenanceTicketDTO createTicket(@RequestBody MaintenanceTicket ticket){
         return service.create(ticket);
     }
 
@@ -30,8 +35,11 @@ public class MaintanceTicketController {
         return service.findAll();
     }
 
-    @PutMapping("/update")
-    public MaintenanceTicketDTO update(@RequestBody MaintenanceTicket ticket){
-        return service.update(ticket);
+    @PutMapping("/startCall/{id}")
+    public MaintenanceTicketDTO startCall(@PathVariable("id")Long id){
+        MaintenanceTicket ticket = repository.findById(id).orElseThrow(
+                () -> new TicketResourceNotFoundException("ticket not found.")
+        );
+        return service.startCall(ticket);
     }
 }

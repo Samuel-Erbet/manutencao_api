@@ -5,6 +5,7 @@ create table maintenance_ticket(
     location VARCHAR(50) NOT NULL,
     title VARCHAR(50) NOT NULL,
     resolution VARCHAR(255),
-    solved BOOLEAN NOT NULL DEFAULT FALSE
+    solved varchar(10),
+    status varchar(20) NOT NULL DEFAULT "ABERTO"
 
 );
