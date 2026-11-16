@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 import static br.com.samuel.manutencao.domain.StatusTicket.ABERTO;
+import static br.com.samuel.manutencao.domain.StatusTicket.EM_ANDAMENTO;
 
 @Service
 public class MaintanceTicketService {
@@ -72,7 +73,7 @@ public class MaintanceTicketService {
         updatedTicket.setResolution(ticket.getResolution());
         updatedTicket.setStatus(ticket.getStatus());
         updatedTicket.setTitle(ticket.getTitle());
-        updatedTicket.setStatus(ABERTO);
+        updatedTicket.setStatus(EM_ANDAMENTO);
 
         repository.save(updatedTicket);
 
