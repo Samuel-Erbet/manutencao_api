@@ -2,6 +2,7 @@ package br.com.samuel.manutencao.ExceptionHandler;
 
 import br.com.samuel.manutencao.ExceptionHandler.exceptions.TicketResourceNotFoundException;
 import br.com.samuel.manutencao.ExceptionHandler.exceptions.TicketResourceNullException;
+import br.com.samuel.manutencao.ExceptionHandler.exceptions.TicketStatusException;
 import br.com.samuel.manutencao.ExceptionHandler.response.ResponseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +35,17 @@ public class CustomExceptionHandler {
         );
 
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(TicketStatusException.class)
+    public ResponseEntity<ResponseException> handleStatusException(Exception ex, WebRequest request){
+        ResponseException response = new ResponseException(
+                new Date(),
+                request.getDescription(false),
+                ex.getMessage()
+        );
+
+        return new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
     }
 
     @ExceptionHandler(Exception.class)

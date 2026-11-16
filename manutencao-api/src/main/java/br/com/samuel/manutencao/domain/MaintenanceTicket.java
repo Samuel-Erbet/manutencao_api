@@ -1,8 +1,6 @@
 package br.com.samuel.manutencao.domain;
 
 import jakarta.persistence.*;
-
-import java.util.Date;
 import java.util.Objects;
 
 import static br.com.samuel.manutencao.domain.StatusTicket.ABERTO;
@@ -26,9 +24,9 @@ public class MaintenanceTicket {
     @Column(name = "resolution")
     private String resolution;
 
-    @Column(name = "status",length = 8)
+    @Column(name = "status", length = 20, nullable = false)
     @Enumerated(EnumType.STRING)
-    private StatusTicket status = ABERTO;
+    private StatusTicket status=ABERTO;
 
     @Column(name = "solved",length = 8)
     private String solved;
@@ -80,8 +78,8 @@ public class MaintenanceTicket {
         return status;
     }
 
-    public StatusTicket setStatus(StatusTicket status) {
-        return status;
+    public void setStatus(StatusTicket status) {
+        this.status = status;
     }
 
     public String getSolved() {

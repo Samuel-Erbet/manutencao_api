@@ -35,11 +35,8 @@ public class MaintanceTicketController {
         return service.findAll();
     }
 
-    @PutMapping("/startCall/{id}")
+    @PatchMapping("/startCall/{id}")
     public MaintenanceTicketDTO startCall(@PathVariable("id")Long id){
-        MaintenanceTicket ticket = repository.findById(id).orElseThrow(
-                () -> new TicketResourceNotFoundException("ticket not found.")
-        );
-        return service.startCall(ticket);
+        return service.startCall(id);
     }
 }

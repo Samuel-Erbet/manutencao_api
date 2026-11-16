@@ -1,11 +1,14 @@
 package br.com.samuel.manutencao.service;
 
 import br.com.samuel.manutencao.ExceptionHandler.exceptions.TicketResourceNotFoundException;
+import br.com.samuel.manutencao.ExceptionHandler.exceptions.TicketStatusException;
 import br.com.samuel.manutencao.domain.MaintenanceTicket;
 import br.com.samuel.manutencao.domain.MaintenanceTicketDTO;
+import br.com.samuel.manutencao.domain.StatusTicket;
 import br.com.samuel.manutencao.domain.mapper.MaintenanceTicketMapper;
 import br.com.samuel.manutencao.ExceptionHandler.exceptions.TicketResourceNullException;
 import br.com.samuel.manutencao.repository.TicketsRepository;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -47,12 +50,6 @@ public class MaintanceTicketService {
         MaintenanceTicket wantedTicket = repository.findById(id).orElseThrow(
                 () -> new TicketResourceNotFoundException("ticket not found.")
         );
-
-        System.out.println(wantedTicket.getStatus());
-        System.out.println(wantedTicket.getResolution());
-        System.out.println(wantedTicket.getTitle());
-        System.out.println(wantedTicket.getLocation());
-        System.out.println(wantedTicket.getDescription());
         logger.info("Finding a ticket.");
 
         return mapper.toDTO(wantedTicket);
@@ -63,20 +60,18 @@ public class MaintanceTicketService {
         return mapper.listToDTO(repository.findAll());
     }
 
-    public MaintenanceTicketDTO startCall(MaintenanceTicket ticket) {
+    @Transactional
+    public MaintenanceTicketDTO startCall(Long id) {
         logger.info("updating tickets.");
-        MaintenanceTicket updatedTicket = repository.findById(ticket.getId()).orElseThrow(
+        MaintenanceTicket updatedTicket = repository.findById(id).orElseThrow(
                 () -> new TicketResourceNotFoundException("ticket not found.")
         );
-        updatedTicket.setDescription(ticket.getDescription());
-        updatedTicket.setLocation(ticket.getLocation());
-        updatedTicket.setResolution(ticket.getResolution());
-        updatedTicket.setStatus(ticket.getStatus());
-        updatedTicket.setTitle(ticket.getTitle());
+
+        if (!updatedTicket.getStatus().equals(ABERTO))
+            throw new TicketStatusException("you can only open a ticket with status in ABERTO");
+
         updatedTicket.setStatus(EM_ANDAMENTO);
-
         repository.save(updatedTicket);
-
         return mapper.toDTO(updatedTicket);
     }
 }
